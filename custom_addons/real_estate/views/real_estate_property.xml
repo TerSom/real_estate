@@ -23,6 +23,7 @@
                             <field name="postcode"></field>
                             <field name="expected_price"></field>
                             <field name="bedrooms"></field>
+                            <field name="type_id"></field>
                         </group>
                         <group>
                             <field name="living_area"></field>
@@ -30,6 +31,7 @@
                             <field name="date_availability"></field>
                             <field name="state"></field>
                             <field name="active"></field>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"></field>
                         </group>
                     </group>
                 </sheet>

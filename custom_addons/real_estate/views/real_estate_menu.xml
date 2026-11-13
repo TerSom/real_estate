@@ -4,13 +4,28 @@
     <menuitem
         id="real_estate_menu_root"
         name="Real Estate"
-        sequence="10"/>
+        sequence="10"
+        web_icon="real_estate,static/description/icon.png"/>
 
     <menuitem
         id="real_estate_menu_property"
         name="Property"
         parent="real_estate_menu_root"
         action="real_estate_property_action"
+        sequence="10"/>
+
+    <menuitem
+        id="real_estate_menu_tag"
+        name="Tag"
+        action="real_estate_tag_action"
+        parent="real_estate_menu_root"
+        sequence="10"/>
+
+    <menuitem
+        id="real_estate_menu_type"
+        name="Type"
+        action="real_estate_type_action"
+        parent="real_estate_menu_root"
         sequence="10"/>
 
 </odoo>
