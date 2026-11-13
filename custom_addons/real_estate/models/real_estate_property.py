@@ -20,3 +20,5 @@ class RealEstateProperty(models.Model):
         ('cancelled','Cancelled')
     ],default='draft',required=True)
     active = fields.Boolean(default=True)
+    type_id = fields.Many2one('real.estate.type')
+    tag_ids = fields.Many2many('real.estate.tag')
