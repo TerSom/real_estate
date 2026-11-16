@@ -20,5 +20,12 @@ class RealEstateProperty(models.Model):
         ('cancelled','Cancelled')
     ],default='draft',required=True)
     active = fields.Boolean(default=True)
-    type_id = fields.Many2one('real.estate.type')
+    best_price = fields.Float(compute='_compute_best_price')
+    type_id = fields.Many2one('real.estate.type',ondelete='restrict')
     tag_ids = fields.Many2many('real.estate.tag')
+    offer_ids = fields.One2many('real.estate.offer','property_id')
+
+    @api.depends('offer_ids.price')
+    def _compute_best_price(self):
+        for record in self:
+            record.best_price = max(record.offer_ids.mapped('price'),default=0.0)

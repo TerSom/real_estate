@@ -11,6 +11,7 @@
         'views/real_estate_property.xml',
         'views/real_estate_tag.xml',
         'views/real_estate_type.xml',
+        'views/real_estate_offer.xml',
         'views/real_estate_menu.xml',
     ],
     'assets': {
