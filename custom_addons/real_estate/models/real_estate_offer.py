@@ -1,0 +1,33 @@
+from odoo import models,fields,api
+from datetime import timedelta
+
+class RealEstateOffer(models.Model):
+    _name = 'real.estate.offer'
+    _description = 'Real Estate Offer'
+
+    property_id = fields.Many2one('real.estate.property',required=True,ondelete='cascade')
+    partner_id = fields.Many2one('res.partner',required=True)
+    price = fields.Float(required=True)
+    state = fields.Selection([
+        ('draft','Draft'),
+        ('accepted','Accepted'),
+        ('refused','Refused')
+    ],default='draft',copy=False)
+    validity_days = fields.Integer(default=7)
+    date_deadline = fields.Date(compute='_compute_date_deadline',inverse='_inverse_date_deadline')
+
+    @api.depends('create_date', 'validity_days')
+    def _compute_date_deadline(self):
+        for record in self:
+            date = record.create_date.date() if record.create_date else fields.Date.today()
+            record.date_deadline = date + timedelta(days=record.validity_days)
+
+    def _inverse_date_deadline(self):
+        for record in self:
+            date = record.create_date.date() if record.create_date else fields.Date.today()
+            record.validity_days = (record.date_deadline - date).days
+
+
+    _sql_constraints = [
+        ('min_price','CHECK(price > 0)','price must be greater than 0')
+    ]

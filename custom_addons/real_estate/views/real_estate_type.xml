@@ -26,7 +26,7 @@
                         <field name="sequence"></field>
                     </group>
                     <notebook>
-                        <page name="real_estate_property" string="real_estate_property">
+                        <page name="Properties" string="Properties">
                             <field name="property_ids">
                                 <list>
                                     <field name="name"></field>
@@ -34,6 +34,7 @@
                                     <field name="expected_price"></field>
                                     <field name="date_availability"></field>
                                     <field name="state"></field>
+                                    <field name="bedrooms"></field>
                                 </list>
                             </field>
                         </page>
