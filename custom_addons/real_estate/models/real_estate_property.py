@@ -13,6 +13,8 @@ class RealEstateProperty(models.Model):
     bedrooms = fields.Integer(default=2)
     living_area = fields.Integer()
     garden = fields.Boolean()
+    garden_area = fields.Integer()
+    total_land_area = fields.Integer(compute='_total_land_area')
     date_availability = fields.Date(copy=False, default=lambda self: fields.Date.today() + relativedelta(months=3),)
     state = fields.Selection([
         ('draft','Draft'),
@@ -32,6 +34,17 @@ class RealEstateProperty(models.Model):
     def _compute_best_price(self):
         for record in self:
             record.best_price = max(record.offer_ids.mapped('price'),default=0.0)
+    
+    @api.onchange('garden')
+    def onchange_garden(self):
+        for record in self:
+            if not record.garden:
+                record.garden_area = 0
+    
+    @api.depends('living_area','garden_area')
+    def _total_land_area(self):
+        for record in self:
+            record.total_land_area = record.living_area + record.garden_area
 
     def action_sold(self):
         for record in self:
