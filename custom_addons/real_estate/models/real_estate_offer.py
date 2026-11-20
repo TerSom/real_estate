@@ -5,6 +5,7 @@ from odoo.exceptions import ValidationError,UserError
 class RealEstateOffer(models.Model):
     _name = 'real.estate.offer'
     _description = 'Real Estate Offer'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
     property_id = fields.Many2one('real.estate.property',required=True,ondelete='cascade')
     partner_id = fields.Many2one('res.partner',required=True)
@@ -44,6 +45,7 @@ class RealEstateOffer(models.Model):
                 'buyer_id': record.partner_id.id,
                 'selling_price': record.price,
             })
+            prop.message_post(body=f"Offer from {record.partner_id.name} accepted at {record.price}")
 
     def action_refuse(self):
         for record in self:
