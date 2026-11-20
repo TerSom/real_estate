@@ -86,6 +86,10 @@
         <field name="arch" type="xml">
             <search >
                 <field name="name"></field>
+                <field name="postcode"></field>
+                <field name="type_id"></field>
+                <field name="tag_ids"></field>
+                <field name="bedrooms"></field>
                 <field name="living_area" filter_domain="[('living_area', '>=', self)]"></field>
                 <filter name="available" string="Available" domain="[('state', 'in',['draft','listed'])]" />
                 <group expand="1" string="Group By">
