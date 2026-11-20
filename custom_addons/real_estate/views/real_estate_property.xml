@@ -20,6 +20,11 @@
                     <field name="state" widget="statusbar" statusbar_visible="draft,listed,sold"></field>
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_viewings" type="object" class="oe_stat_button" icon="fa-calendar">
+                            <field name="viewing_count" string="Viewings" widget="statinfo"/>
+                        </button>
+                    </div>
                     <group>
                         <group>
                             <field name="name"></field>
@@ -29,6 +34,7 @@
                             <field name="bedrooms"></field>
                             <field name="type_id"></field>
                             <field name="selling_price"></field>
+                            <field name="agent_id"></field>
                         </group>
                         <group>
                             <field name="living_area"></field>
@@ -57,6 +63,7 @@
                         </page>
                     </notebook>
                 </sheet>
+                <chatter/>
             </form>
         </field>
     </record>

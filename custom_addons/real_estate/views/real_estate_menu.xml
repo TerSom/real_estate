@@ -15,6 +15,13 @@
         sequence="10"/>
 
     <menuitem
+        id="real_estate_menu_viewing"
+        name="Schedule"
+        parent="real_estate_menu_root"
+        action="real_estate_viewing_action"
+        sequence="10"/>
+
+    <menuitem
         id="real_estate_config_menu"
         name="Configuration"
         parent="real_estate_menu_root"
