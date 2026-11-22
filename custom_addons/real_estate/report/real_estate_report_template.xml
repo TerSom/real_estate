@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="model_property_brocure">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page re-brochure">
+                        <style>
+                            .re-brochure { color: #243b35; font-family: sans-serif; font-size: 12px; line-height: 1.6; }
+                            .re-brochure h1 { font-family: Georgia, serif; font-size: 36px; line-height: 1.15; margin: 0 0 14px; color: #183e34; overflow-wrap: break-word; }
+                            .re-brochure h2 { font-size: 17px; color: #183e34; margin: 28px 0 12px; }
+                            .re-brochure .re-meta { color: #52665e; margin-bottom: 20px; }
+                            .re-brochure .re-status { display: inline-block; padding: 3px 12px; border: 1px solid #81968a; font-size: 11px; }
+                            .re-brochure .re-price { padding: 20px 24px; background-color: #edf2ed; margin: 24px 0; page-break-inside: avoid; }
+                            .re-brochure .re-price-value { font-size: 28px; font-weight: bold; color: #183e34; }
+                            .re-brochure .re-label { color: #52665e; font-size: 11px; }
+                            .re-brochure .re-specs { width: 100%; border-collapse: collapse; }
+                            .re-brochure .re-specs tr { page-break-inside: avoid; }
+                            .re-brochure .re-specs th, .re-brochure .re-specs td { padding: 10px 0; border-bottom: 1px solid #d9e1db; vertical-align: top; }
+                            .re-brochure .re-specs th { width: 65%; font-weight: normal; text-align: left; color: #52665e; }
+                            .re-brochure .re-specs td { text-align: right; font-weight: bold; }
+                            .re-brochure .re-description { white-space: pre-wrap; overflow-wrap: break-word; }
+                            .re-brochure .re-tag { display: inline-block; margin: 0 6px 6px 0; padding: 3px 10px; border: 1px solid #d9e1db; }
+                            .re-brochure .re-contact { margin-top: 30px; padding-top: 18px; border-top: 2px solid #183e34; page-break-inside: avoid; }
+                            .re-brochure .re-contact h2 { margin: 0 0 8px; }
+                            .re-brochure .re-contact-name { font-size: 16px; font-weight: bold; }
+                        </style>
+
+                        <h1><span t-field="o.name"/></h1>
+                        <div class="re-meta">
+                            <span t-if="o.type_id" t-field="o.type_id"/>
+                            <t t-if="o.type_id and o.postcode"> / </t>
+                            <t t-if="o.postcode">Postcode <span t-field="o.postcode"/></t>
+                        </div>
+                        <span class="re-status" t-field="o.state"/>
+
+                        <div class="re-price">
+                            <div class="re-label">Asking price</div>
+                            <!-- ponytail: prices have no currency field; use company currency until multi-currency pricing is introduced. -->
+                            <div class="re-price-value">
+                                <span t-field="o.expected_price"
+                                      t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                            </div>
+                        </div>
+
+                        <h2>Property details</h2>
+                        <table class="re-specs">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Bedrooms</th>
+                                    <td><span t-field="o.bedrooms"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Living area</th>
+                                    <td><span t-field="o.living_area"/> m²</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Garden</th>
+                                    <td><span t-if="o.garden">Yes</span><span t-else="">No</span></td>
+                                </tr>
+                                <tr t-if="o.garden">
+                                    <th scope="row">Garden area</th>
+                                    <td><span t-field="o.garden_area"/> m²</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Total area</th>
+                                    <td><span t-field="o.total_land_area"/> m²</td>
+                                </tr>
+                                <tr t-if="o.date_availability">
+                                    <th scope="row">Available from</th>
+                                    <td><span t-field="o.date_availability"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <t t-if="o.description">
+                            <h2>About this property</h2>
+                            <div class="re-description" t-field="o.description"/>
+                        </t>
+                        <t t-if="o.tag_ids">
+                            <h2>Features</h2>
+                            <span t-foreach="o.tag_ids" t-as="tag" class="re-tag">
+                                <span t-field="tag.name"/>
+                            </span>
+                        </t>
+
+                        <div t-if="o.agent_id" class="re-contact">
+                            <h2>Arrange a viewing</h2>
+                            <div class="re-contact-name" t-field="o.agent_id.name"/>
+                            <div t-if="o.agent_id.partner_id.phone">
+                                Phone: <span t-field="o.agent_id.partner_id.phone"/>
+                            </div>
+                            <div t-if="o.agent_id.partner_id.email">
+                                Email: <span t-field="o.agent_id.partner_id.email"/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

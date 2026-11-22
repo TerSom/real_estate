@@ -2,7 +2,7 @@
 <odoo>
     <!-- action -->
     <record id="real_estate_property_action" model="ir.actions.act_window">
-        <field name="name">real_estate_property</field>
+        <field name="name">Real Estate Property</field>
         <field name="res_model">real.estate.property</field>
         <field name="view_mode">list,form</field>
         <field name="context">{'search_default_available': 1}</field>

@@ -14,6 +14,10 @@
         'views/real_estate_type.xml',
         'views/real_estate_offer.xml',
         'views/real_estate_viewing.xml',
+        'views/res_partner_views.xml',
+        'report/real_estate_report_template.xml',
+        'report/report_paperformat.xml',
+        'report/real_estate_report.xml',
         'views/real_estate_menu.xml',
     ],
     'assets': {
