@@ -8,7 +8,8 @@ class RealEstateTag(models.Model):
     name = fields.Char(required=True)
     color = fields.Integer()
 
-    _sql_constraints = [
-            ('name_unique', 'UNIQUE(name)', 'Name must be unique.')
-        ]
+    _name_unique = models.Constraint(
+        'UNIQUE(name)',
+        "Name must be unique.",
+    )
     

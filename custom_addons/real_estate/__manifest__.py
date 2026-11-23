@@ -1,6 +1,6 @@
 {
     'name': 'Real Estate',
-    'version': '1.0',
+    'version': '20.0.1.0.0',
     'category': 'Services',
     'summary': 'Real Estate Management System',
     'description': """Real Estate Management System""",
@@ -8,7 +8,6 @@
     'depends': ['base','mail'],
     'data': [
         'security/real_estate_security.xml',
-        'security/ir.model.access.csv',
         'views/real_estate_property.xml',
         'views/real_estate_tag.xml',
         'views/real_estate_type.xml',
@@ -19,6 +18,7 @@
         'report/report_paperformat.xml',
         'report/real_estate_report.xml',
         'views/real_estate_menu.xml',
+        'security/ir.access.csv',
     ],
     'assets': {
     'web.assets_backend': [

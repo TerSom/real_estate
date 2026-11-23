@@ -1,0 +1,11 @@
+id,name,model_id,group_id/id,operation,domain
+rule_real_estate_agent,Agent: Own Properties,real.estate.property,real_estate.group_real_estate_agent,cru,"[('agent_id', '=', user.id)]"
+rule_real_estate_manager,Manager: All Properties,real.estate.property,real_estate.group_real_estate_manager,crud,
+access_real_estate_tag_agent,access_real_estate_tag_agent,real.estate.tag,real_estate.group_real_estate_agent,r,
+access_real_estate_tag_manager,access_real_estate_tag_manager,real.estate.tag,real_estate.group_real_estate_manager,crud,
+access_real_estate_type_agent,access_real_estate_agent,real.estate.type,real_estate.group_real_estate_agent,r,
+access_real_estate_type_manager,access_real_estate_manager,real.estate.type,real_estate.group_real_estate_manager,crud,
+access_real_estate_offer_agent,access_real_estate_offer_agent,real.estate.offer,real_estate.group_real_estate_agent,cru,
+access_real_estate_offer_manager,access_real_estate_offer_manager,real.estate.offer,real_estate.group_real_estate_manager,crud,
+rule_real_estate_viewing_agent,Agent: Own Viewings,real.estate.viewing,real_estate.group_real_estate_agent,cru,"[('agent_id', '=', user.id)]"
+rule_real_estate_viewing_manager,Manager: All Viewings,real.estate.viewing,real_estate.group_real_estate_manager,crud,
