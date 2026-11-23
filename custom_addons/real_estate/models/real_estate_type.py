@@ -10,9 +10,10 @@ class RealEstateType(models.Model):
     property_ids = fields.One2many('real.estate.property','type_id')
     property_count = fields.Integer(string='Property Count', compute="_compute_property_count")
 
-    _sql_constraints = [
-        ('name_unique', 'UNIQUE(name)', 'Name must be unique.')
-    ]
+    _name_unique = models.Constraint(
+        'UNIQUE(name)',
+        "Name must be unique.",
+    )
 
 
     @api.depends('property_ids')

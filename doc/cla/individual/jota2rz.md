@@ -1,4 +1,4 @@
-Chile, 2025-06-23
+Chile, 2026-07-09
 
 I hereby agree to the terms of the Odoo Individual Contributor License
 Agreement v1.0.

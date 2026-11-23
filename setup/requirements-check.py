@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Checks versions from the requirements files against distribution-provided
@@ -61,7 +61,6 @@ Version = Tuple[int, ...]
 
 # shared beween debian and ubuntu
 SPECIAL = {
-    'pytz': 'tz',
     'libsass': 'libsass-python',
 }
 SUPPORTED_FORMATS = ('txt', 'ansi', 'svg', 'html', 'json')

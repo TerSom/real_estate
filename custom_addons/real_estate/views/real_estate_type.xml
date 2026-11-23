@@ -17,7 +17,7 @@
             <form>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_view_properties" type="object" class="oe_stat_button" icon="fa-home">
+                        <button name="action_view_properties" type="object" class="oe_stat_button" icon="home">
                             <field name="property_count" string="Properties" widget="statinfo"/>
                         </button>
                     </div>

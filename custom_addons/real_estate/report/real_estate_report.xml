@@ -5,7 +5,6 @@
         <field name="model">real.estate.property</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">real_estate.model_property_brocure</field>
-        <field name="report_file">real_estate.model_property_brocure</field>
         <field name="print_report_name">'%s' % object.name</field>
         <field name="binding_model_id" ref="model_real_estate_property"/>
         <field name="binding_type">report</field>

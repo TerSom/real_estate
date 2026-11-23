@@ -18,9 +18,10 @@ class RealEstateOffer(models.Model):
     validity_days = fields.Integer(default=7)
     date_deadline = fields.Date(compute='_compute_date_deadline',inverse='_inverse_date_deadline')
 
-    _sql_constraints = [
-        ('min_price','CHECK(price > 0)','price must be greater than 0')
-    ]
+    _min_price = models.Constraint(
+        'CHECK(price > 0)',
+        "price must be greater than 0",
+    )
 
     @api.depends('create_date', 'validity_days')
     def _compute_date_deadline(self):
