@@ -39,8 +39,7 @@
                             <div class="re-label">Asking price</div>
                             <!-- ponytail: prices have no currency field; use company currency until multi-currency pricing is introduced. -->
                             <div class="re-price-value">
-                                <span t-field="o.expected_price"
-                                      t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                <span t-field="o.expected_price"/>
                             </div>
                         </div>
 
