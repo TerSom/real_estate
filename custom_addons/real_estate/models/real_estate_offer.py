@@ -9,7 +9,8 @@ class RealEstateOffer(models.Model):
 
     property_id = fields.Many2one('real.estate.property',required=True,ondelete='cascade')
     partner_id = fields.Many2one('res.partner',required=True)
-    price = fields.Float(required=True)
+    currency_id = fields.Many2one(related='property_id.currency_id')
+    price = fields.Monetary(required=True)
     state = fields.Selection([
         ('draft','Draft'),
         ('accepted','Accepted'),

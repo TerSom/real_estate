@@ -35,6 +35,7 @@
                             <field name="type_id"></field>
                             <field name="selling_price"></field>
                             <field name="agent_id"></field>
+                            <field name="currency_id" invisible='1'></field>
                         </group>
                         <group>
                             <field name="living_area"></field>
@@ -83,6 +84,7 @@
                 <field name="tag_ids" widget="many2many_tags"></field>
                 <field name="type_id"></field>
                 <field name="best_price"></field>
+                <field name="currency_id" column_invisible="True"/>
             </list>
         </field>
     </record>
