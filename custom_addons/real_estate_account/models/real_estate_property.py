@@ -11,8 +11,11 @@ class RealEstateProperty(models.Model):
 
     @api.depends('invoice_ids')
     def _compute_invoice_count(self):
+        counts = dict(self.env['account.move'].sudo()._read_group(
+            [('property_id', 'in', self.ids)], ['property_id'], ['__count'],
+        ))
         for record in self:
-            record.invoice_count = len(record.invoice_ids)
+            record.invoice_count = counts.get(record, 0)
 
     def action_view_invoice(self):
         self.ensure_one()
@@ -36,38 +39,34 @@ class RealEstateProperty(models.Model):
 
     def action_sold(self):
         res = super().action_sold()
-
-        journal = self.env['account.journal'].search([
-            ('type', '=', 'sale'),
-            ('company_id', '=', self.env.company.id),
-        ], limit=1)
-        income_account = journal.default_account_id
+        Move = self.env['account.move'].sudo()
+        already = Move.search([('property_id', 'in', self.ids)]).property_id
 
         moves_vals = []
-        prop_map = []
-
-        for prop in self:
-            if prop.invoice_id:
-                continue
-
+        for prop in self - already:
             moves_vals.append({
-                'partner_id': prop.buyer_id.id,
                 'move_type': 'out_invoice',
+                'partner_id': prop.buyer_id.id,
                 'property_id': prop.id,
-                'invoice_line_ids': [
-                    Command.create({
-                        'name': f"Property: {prop.name}",
-                        'quantity': 1.0,
-                        'price_unit': prop.selling_price,
-                        'account_id': income_account.id if income_account else False,
-                    }),
-                ],
+                'invoice_origin': prop.name,
+                'invoice_line_ids': [Command.create({
+                    'name': f"Property: {prop.name}",
+                    'quantity': 1.0,
+                    'price_unit': prop.selling_price,
+                })],
             })
-            prop_map.append(prop)
-
+            if prop.agent_id and prop.commission_rate > 0:
+                moves_vals.append({
+                    'move_type': 'in_invoice',
+                    'partner_id': prop.agent_id.partner_id.id,
+                    'property_id': prop.id,
+                    'invoice_origin': prop.name,
+                    'invoice_line_ids': [Command.create({
+                        'name': f"Commission: {prop.name} ({prop.commission_rate}%)",
+                        'quantity': 1.0,
+                        'price_unit': prop.selling_price * prop.commission_rate / 100.0,
+                    })],
+                })
         if moves_vals:
-            created_moves = self.env['account.move'].sudo().create(moves_vals)
-            for prop, move in zip(prop_map, created_moves):
-                prop.invoice_id = move.id
-
+            Move.create(moves_vals)
         return res
