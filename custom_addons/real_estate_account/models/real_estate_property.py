@@ -44,13 +44,16 @@ class RealEstateProperty(models.Model):
 
         moves_vals = []
         for prop in self - already:
+            prop_label = f"[{prop.code}] {prop.name}" if prop.code else prop.name
+            origin_ref = prop.code or prop.name
+
             moves_vals.append({
                 'move_type': 'out_invoice',
                 'partner_id': prop.buyer_id.id,
                 'property_id': prop.id,
-                'invoice_origin': prop.name,
+                'invoice_origin': origin_ref,
                 'invoice_line_ids': [Command.create({
-                    'name': f"Property: {prop.name}",
+                    'name': f"Property: {prop_label}",
                     'quantity': 1.0,
                     'price_unit': prop.selling_price,
                 })],
@@ -60,9 +63,9 @@ class RealEstateProperty(models.Model):
                     'move_type': 'in_invoice',
                     'partner_id': prop.agent_id.partner_id.id,
                     'property_id': prop.id,
-                    'invoice_origin': prop.name,
+                    'invoice_origin': origin_ref,
                     'invoice_line_ids': [Command.create({
-                        'name': f"Commission: {prop.name} ({prop.commission_rate}%)",
+                        'name': f"Commission: {prop_label} ({prop.commission_rate}%)",
                         'quantity': 1.0,
                         'price_unit': prop.selling_price * prop.commission_rate / 100.0,
                     })],
