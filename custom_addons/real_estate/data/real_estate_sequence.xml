@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="seq_real_estate_property" model="ir.sequence">
+        <field name="name">Real Estate Property Sequence</field>
+        <field name="code">real.estate.property</field>
+        <field name="prefix">PROP/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"></field>
+    </record>
+
+</odoo>

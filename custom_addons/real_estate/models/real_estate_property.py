@@ -26,6 +26,7 @@ class RealEstateProperty(models.Model):
     active = fields.Boolean(default=True)
     best_price = fields.Monetary(compute='_compute_best_price')
     selling_price = fields.Monetary(readonly=True,copy=False,tracking=True)
+    code = fields.Char(string='Reference', readonly=True, copy=False, default='New', index=True)
     agent_id = fields.Many2one('res.users',string='Agent', default=lambda self: self.env.user, copy=False)
     buyer_id = fields.Many2one('res.partner',readonly=True,copy=False,tracking=True)
     currency_id = fields.Many2one('res.currency',required=True,store=True,default=lambda self: self.env.company.currency_id)
@@ -34,6 +35,20 @@ class RealEstateProperty(models.Model):
     offer_ids = fields.One2many('real.estate.offer','property_id')
     viewing_ids = fields.One2many('real.estate.viewing','property_id')
     viewing_count = fields.Integer(compute='_compute_viewing_count')
+
+    _code_unique = models.Constraint('UNIQUE(code)','Reference must be unique.')
+
+    @api.depends('code', 'name')
+    def _compute_display_name(self):
+        for record in self:
+            record.display_name = f"[{record.code}] {record.name}" if record.code else record.name
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get('code','New') == 'New':
+                vals['code'] = self.env['ir.sequence'].next_by_code('real.estate.property') or 'New'
+        return super().create(vals_list)
 
     @api.depends('offer_ids.price')
     def _compute_best_price(self):

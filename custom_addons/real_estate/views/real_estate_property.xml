@@ -25,6 +25,11 @@
                             <field name="viewing_count" string="Viewings" widget="statinfo"/>
                         </button>
                     </div>
+                    <div class=" w-full pb-3">
+                        <h1>
+                            <field name="code" placeholder="Property Code"/>
+                        </h1>
+                    </div>
                     <group>
                         <group>
                             <field name="name"></field>
@@ -75,6 +80,7 @@
         <field name="model">real.estate.property</field>
         <field name="arch" type="xml">
             <list>
+                <field name="code"></field>
                 <field name="name"></field>
                 <field name="postcode"></field>
                 <field name="expected_price"></field>
@@ -94,6 +100,7 @@
         <field name="model">real.estate.property</field>
         <field name="arch" type="xml">
             <search >
+                <field name="code"></field>
                 <field name="name"></field>
                 <field name="postcode"></field>
                 <field name="type_id"></field>
