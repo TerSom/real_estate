@@ -2,22 +2,37 @@
 <odoo>
 
     <record id="real_estate_tag_action" model="ir.actions.act_window">
-        <field name="name">Real Estate Tag</field>
+        <field name="name">Property Tags</field>
         <field name="res_model">real.estate.tag</field>
         <field name="view_mode">list,form</field>
         <field name="domain">[]</field>
         <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Property Tags
+            </p>
+            <p>
+                Use tags to categorize property features like Garden, Pool, Garage, Renovated, etc.
+            </p>
+        </field>
     </record>
 
     <record id="real_estate_tag_view_form" model="ir.ui.view">
         <field name="name">real.estate.tag.view.form</field>
         <field name="model">real.estate.tag</field>
         <field name="arch" type="xml">
-            <form string="">
+            <form string="Property Tag">
                 <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Tag Name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Swimming Pool, Sea View"/>
+                        </h1>
+                    </div>
                     <group>
-                        <field name="name"></field>
-                        <field name="color"></field>
+                        <group>
+                            <field name="color" widget="color_picker"/>
+                        </group>
                     </group>
                 </sheet>
             </form>
@@ -28,9 +43,9 @@
         <field name="name">real.estate.tag.view.list</field>
         <field name="model">real.estate.tag</field>
         <field name="arch" type="xml">
-            <list string="">
-                <field name="name"></field>
-                <field name="color"></field>
+            <list string="Property Tags" editable="bottom" sample="1">
+                <field name="name" placeholder="Tag Name"/>
+                <field name="color" widget="color_picker"/>
             </list>
         </field>
     </record>

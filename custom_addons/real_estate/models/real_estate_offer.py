@@ -7,21 +7,21 @@ class RealEstateOffer(models.Model):
     _description = 'Real Estate Offer'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    property_id = fields.Many2one('real.estate.property',required=True,ondelete='cascade')
-    partner_id = fields.Many2one('res.partner',required=True)
-    currency_id = fields.Many2one(related='property_id.currency_id')
+    property_id = fields.Many2one('real.estate.property', required=True, ondelete='cascade')
+    partner_id = fields.Many2one('res.partner', required=True)
+    currency_id = fields.Many2one(related='property_id.currency_id', store=True)
     price = fields.Monetary(required=True)
     state = fields.Selection([
-        ('draft','Draft'),
-        ('accepted','Accepted'),
-        ('refused','Refused')
-    ],default='draft',copy=False,readonly=True)
+        ('draft', 'Draft'),
+        ('accepted', 'Accepted'),
+        ('refused', 'Refused'),
+    ], default='draft', copy=False, readonly=True)
     validity_days = fields.Integer(default=7)
-    date_deadline = fields.Date(compute='_compute_date_deadline',inverse='_inverse_date_deadline')
+    date_deadline = fields.Date(compute='_compute_date_deadline', inverse='_inverse_date_deadline')
 
     _min_price = models.Constraint(
         'CHECK(price > 0)',
-        "price must be greater than 0",
+        "Price must be greater than 0.",
     )
 
     @api.depends('create_date', 'validity_days')

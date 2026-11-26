@@ -25,47 +25,72 @@
                             <field name="viewing_count" string="Viewings" widget="statinfo"/>
                         </button>
                     </div>
-                    <div class=" w-full pb-3">
+                    <div class="oe_title">
                         <h1>
                             <field name="code" placeholder="Property Code"/>
                         </h1>
+                        <h2>
+                            <field name="name" placeholder="Property Name"/>
+                        </h2>
                     </div>
                     <group>
-                        <group>
-                            <field name="name"></field>
-                            <field name="description"></field>
-                            <field name="postcode"></field>
-                            <field name="expected_price"></field>
-                            <field name="bedrooms"></field>
+                        <group string="General Information">
                             <field name="type_id"></field>
-                            <field name="selling_price"></field>
+                            <field name="postcode"></field>
                             <field name="agent_id"></field>
-                            <field name="currency_id" invisible='1'></field>
-                        </group>
-                        <group>
-                            <field name="living_area"></field>
-                            <field name="garden"></field>
-                            <field name="garden_area" invisible="not garden"></field>
-                            <field name="total_land_area"></field>
-                            <field name="buyer_id"></field>
                             <field name="date_availability"></field>
+                        </group>
+                        <group string="Pricing Information">
+                            <field name="expected_price"></field>
                             <field name="best_price"></field>
-                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"></field>
+                            <field name="selling_price"></field>
+                            <field name="currency_id" invisible='1'></field>
                         </group>
                     </group>
                     <notebook>
-                        <page name="offer" string="Offer">
-                            <field name="offer_ids">
-                                <list editable="bottom">
-                                    <field name="partner_id"></field>
-                                    <field name="price"></field>
-                                    <field name="state"></field>
-                                    <field name="validity_days"></field>
-                                    <button name="action_accept" title="Accept" type="object" class="btn-link" icon="check" invisible="state in ['accepted', 'refused']"></button>
-                                    <button name="action_refuse" title="Refuse" type="object" class="btn-link" icon="close" invisible="state in ['accepted', 'refused']"></button>
-                                    <field name="date_deadline"></field>
+                        <page name="property_details" string="Property Details">
+                            <group>
+                                <group name="property_specifications" string="Property Specifications">
+                                    <field name="bedrooms"></field>
+                                    <field name="living_area"></field>
+                                    <field name="total_land_area"></field>
+                                </group>
+                                <group name="outdoor" string="Outdoor">
+                                    <field name="garden"></field>
+                                    <field name="garden_area" invisible="not garden"></field>
+                                </group>
+                            </group>
+                            <group name="features_amenities" string="Features &amp; Amenities">
+                                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"></field>
+                            </group>
+                        </page>
+                        <page name="offers" string="Offers">
+                            <field name="offer_ids" readonly="state in ['sold', 'cancelled']">
+                                <list editable="bottom" decoration-success="state == 'accepted'" decoration-danger="state == 'refused'">
+                                    <field name="currency_id" column_invisible="True"/>
+                                    <field name="partner_id" string="Buyer"/>
+                                    <field name="price" decoration-bf="1"/>
+                                    <field name="validity_days" string="Validity (Days)"/>
+                                    <field name="date_deadline" string="Deadline"/>
+                                    <field name="state" widget="badge"
+                                           decoration-info="state == 'draft'"
+                                           decoration-success="state == 'accepted'"
+                                           decoration-danger="state == 'refused'"/>
+                                    <button name="action_accept" title="Accept" type="object" class="text-success" icon="check" invisible="state in ['accepted', 'refused'] or parent.state in ['sold', 'cancelled']"/>
+                                    <button name="action_refuse" title="Refuse" type="object" class="text-danger" icon="close" invisible="state in ['accepted', 'refused'] or parent.state in ['sold', 'cancelled']"/>
                                 </list>
                             </field>
+                        </page>
+                        <page name="sales_information" string="Sales Information">
+                            <group>
+                                <field name="buyer_id"></field>
+                                <field name="agent_id"></field>
+                            </group>
+                        </page>
+                        <page name="description" string="Description">
+                            <group>
+                                <field name="description"></field>
+                            </group>
                         </page>
                     </notebook>
                 </sheet>
@@ -79,18 +104,26 @@
         <field name="name">real.estate.property.view.list</field>
         <field name="model">real.estate.property</field>
         <field name="arch" type="xml">
-            <list>
-                <field name="code"></field>
-                <field name="name"></field>
-                <field name="postcode"></field>
-                <field name="expected_price"></field>
-                <field name="date_availability"></field>
-                <field name="state"></field>
-                <field name="bedrooms"></field>
-                <field name="tag_ids" widget="many2many_tags"></field>
-                <field name="type_id"></field>
-                <field name="best_price"></field>
+            <list string="Properties" sample="1" decoration-muted="state == 'cancelled'">
                 <field name="currency_id" column_invisible="True"/>
+                <field name="code" string="Reference" decoration-bf="1"/>
+                <field name="name" string="Property" decoration-bf="1"/>
+                <field name="type_id"/>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" optional="show"/>
+                <field name="postcode" optional="hide"/>
+                <field name="bedrooms" optional="hide"/>
+                <field name="living_area" string="Living Area (m²)" optional="hide"/>
+                <field name="expected_price"/>
+                <field name="best_price" optional="show"/>
+                <field name="selling_price" optional="hide"/>
+                <field name="date_availability" optional="hide"/>
+                <field name="agent_id" widget="many2one_avatar_user" optional="show"/>
+                <field name="activity_ids" widget="list_activity" optional="show"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'listed'"
+                       decoration-success="state == 'sold'"
+                       decoration-danger="state == 'cancelled'"/>
             </list>
         </field>
     </record>

@@ -11,7 +11,7 @@
                     <field name="offer_count" string="Offers" widget="statinfo"/>
                 </button>
                 <button name="action_view_viewing" type="object" class="oe_stat_button" icon="calendar_today" icon_class="oi-filled">
-                    <field name="viewing_count" string="Views" widget="statinfo"/>
+                    <field name="viewing_count" string="Viewings" widget="statinfo"/>
                 </button>
             </xpath>
         </field>

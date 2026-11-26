@@ -2,39 +2,58 @@
 <odoo>
 
     <record id="real_estate_type_action" model="ir.actions.act_window">
-        <field name="name">Real Estate Type</field>
+        <field name="name">Property Types</field>
         <field name="res_model">real.estate.type</field>
         <field name="view_mode">list,form</field>
         <field name="domain">[]</field>
         <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Property Types
+            </p>
+            <p>
+                Define property classifications such as House, Apartment, Commercial, Villa, etc.
+            </p>
+        </field>
     </record>
-
 
     <record id="real_estate_type_view_form" model="ir.ui.view">
         <field name="name">real.estate.type.view.form</field>
         <field name="model">real.estate.type</field>
         <field name="arch" type="xml">
-            <form>
+            <form string="Property Type">
                 <sheet>
                     <div class="oe_button_box" name="button_box">
                         <button name="action_view_properties" type="object" class="oe_stat_button" icon="home">
                             <field name="property_count" string="Properties" widget="statinfo"/>
                         </button>
                     </div>
+                    <div class="oe_title">
+                        <label for="name" string="Type Name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Residential, Apartment, Villa"/>
+                        </h1>
+                    </div>
                     <group>
-                        <field name="name"></field>
-                        <field name="sequence"></field>
+                        <group>
+                            <field name="sequence"/>
+                        </group>
                     </group>
                     <notebook>
-                        <page name="Properties" string="Properties">
-                            <field name="property_ids">
-                                <list>
-                                    <field name="name"></field>
-                                    <field name="postcode"></field>
-                                    <field name="expected_price"></field>
-                                    <field name="date_availability"></field>
-                                    <field name="state"></field>
-                                    <field name="bedrooms"></field>
+                        <page name="properties" string="Properties">
+                            <field name="property_ids" readonly="1">
+                                <list string="Properties" decoration-muted="state == 'cancelled'">
+                                    <field name="currency_id" column_invisible="True"/>
+                                    <field name="code" decoration-bf="1"/>
+                                    <field name="name" string="Property"/>
+                                    <field name="postcode"/>
+                                    <field name="expected_price"/>
+                                    <field name="date_availability"/>
+                                    <field name="state" widget="badge"
+                                           decoration-info="state == 'draft'"
+                                           decoration-warning="state == 'listed'"
+                                           decoration-success="state == 'sold'"
+                                           decoration-danger="state == 'cancelled'"/>
                                 </list>
                             </field>
                         </page>
@@ -48,9 +67,10 @@
         <field name="name">real.estate.type.view.list</field>
         <field name="model">real.estate.type</field>
         <field name="arch" type="xml">
-            <list>
-                <field name="name"></field>
-                <field name="sequence"></field>
+            <list string="Property Types" sample="1">
+                <field name="sequence" widget="handle"/>
+                <field name="name" decoration-bf="1"/>
+                <field name="property_count" string="Properties"/>
             </list>
         </field>
     </record>

@@ -9,16 +9,29 @@
 
     <menuitem
         id="real_estate_menu_property"
-        name="Property"
+        name="Properties"
         parent="real_estate_menu_root"
         action="real_estate_property_action"
         sequence="10"/>
 
     <menuitem
         id="real_estate_menu_viewing"
-        name="Schedule"
+        name="Viewings"
         parent="real_estate_menu_root"
         action="real_estate_viewing_action"
+        sequence="20"/>
+
+    <menuitem
+        id="real_estate_report_menu"
+        name="Reporting"
+        parent="real_estate_menu_root"
+        sequence="50"/>
+
+    <menuitem
+        id="real_estate_menu_excel_report"
+        name="Property Report"
+        action="action_real_estate_report_wizard"
+        parent="real_estate_report_menu"
         sequence="10"/>
 
     <menuitem
@@ -28,18 +41,18 @@
         sequence="80"/>
 
     <menuitem
-        id="real_estate_menu_tag"
-        name="Tags"
-        action="real_estate_tag_action"
+        id="real_estate_menu_type"
+        name="Property Types"
+        action="real_estate_type_action"
         parent="real_estate.real_estate_config_menu"
         sequence="10"/>
 
     <menuitem
-        id="real_estate_menu_type"
-        name="Types"
-        action="real_estate_type_action"
+        id="real_estate_menu_tag"
+        name="Property Tags"
+        action="real_estate_tag_action"
         parent="real_estate.real_estate_config_menu"
-        sequence="10"/>
+        sequence="20"/>
 
 </odoo>
     
