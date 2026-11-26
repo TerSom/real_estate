@@ -18,6 +18,7 @@
         'report/real_estate_report_template.xml',
         'report/report_paperformat.xml',
         'report/real_estate_report.xml',
+        'wizard/real_estate_report_wizard_views.xml',
         'views/real_estate_menu.xml',
         'security/ir.access.csv',
     ],
@@ -28,4 +29,5 @@
     'installable': True,
     'application': True,
     'license': 'LGPL-3',
+    'external_dependencies': {'python': ['xlsxwriter']},
 }

@@ -22,6 +22,19 @@
         sequence="20"/>
 
     <menuitem
+        id="real_estate_report_menu"
+        name="Reporting"
+        parent="real_estate_menu_root"
+        sequence="50"/>
+
+    <menuitem
+        id="real_estate_menu_excel_report"
+        name="Property Report"
+        action="action_real_estate_report_wizard"
+        parent="real_estate_report_menu"
+        sequence="10"/>
+
+    <menuitem
         id="real_estate_config_menu"
         name="Configuration"
         parent="real_estate_menu_root"
