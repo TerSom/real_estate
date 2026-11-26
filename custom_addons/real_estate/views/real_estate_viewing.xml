@@ -18,16 +18,30 @@
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
+                    <div class="oe_title">
+                        <label for="property_id" string="Property"/>
+                        <h1>
+                            <field name="property_id" placeholder="Select Property"/>
+                        </h1>
+                    </div>
                     <group>
-                        <field name="property_id"></field>
-                        <field name="partner_id"></field>
-                        <field name="agent_id"></field>
-                        <field name="date_start"></field>
-                        <field name="date_stop"></field>
-                        <field name="duration"></field>
-                        <field name="state"></field>
-                        <field name="note"></field>
+                        <group name="viewing_information" string="Viewing Information">
+                            <field name="partner_id" string="Customer"></field>
+                            <field name="agent_id" widget="many2one_avatar_user"></field>
+                        </group>
+                        <group name="schedule_information" string="Schedule Information">
+                            <field name="date_start"></field>
+                            <field name="date_stop"></field>
+                            <field name="duration" widget="float_time" string="Duration (Hours)"></field>
+                        </group>
                     </group>
+                    <notebook>
+                        <page name="notes" string="Notes">
+                            <group string="Notes">
+                                <field name="note" nolabel="1" colspan="2" placeholder="Write survey notes here..."/>
+                            </group>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
@@ -37,15 +51,20 @@
         <field name="name">real.estate.viewing.view.list</field>
         <field name="model">real.estate.viewing</field>
         <field name="arch" type="xml">
-            <list >
-                <field name="property_id"></field>
-                <field name="partner_id"></field>
-                <field name="agent_id"></field>
-                <field name="date_start"></field>
-                <field name="date_stop"></field>
-                <field name="duration"></field>
-                <field name="state"></field>
-                <field name="note"></field>
+            <list string="Property Viewings" sample="1" decoration-muted="state == 'cancelled'">
+                <field name="date_start" decoration-bf="1"/>
+                <field name="property_id" decoration-bf="1"/>
+                <field name="partner_id" string="Customer"/>
+                <field name="agent_id" widget="many2one_avatar_user"/>
+                <field name="duration" widget="float_time" optional="show"/>
+                <field name="date_stop" optional="hide"/>
+                <field name="state" widget="badge"
+                       decoration-warning="state == 'scheduled'"
+                       decoration-success="state == 'done'"
+                       decoration-danger="state == 'cancelled'"/>
+                <button name="action_done" type="object" title="Mark Done" icon="check" class="btn-link" invisible="state != 'scheduled'"/>
+                <button name="action_cancelled" type="object" title="Cancel" icon="close" class="btn-link" invisible="state != 'scheduled'"/>
+                <field name="note" optional="hide"/>
             </list>
         </field>
     </record>
@@ -54,7 +73,7 @@
         <field name="name">real.estate.viewing.view.calendar</field>
         <field name="model">real.estate.viewing</field>
         <field name="arch" type="xml">
-            <calendar string="Survey Schedule" date_start="date_start" date_stop="date_stop" color="agent_id" mode="week" quick_create="0">
+            <calendar string="Viewing Schedule" date_start="date_start" date_stop="date_stop" color="agent_id" mode="week" quick_create="0">
                 <field name="property_id"/>
                 <field name="partner_id"/>
             </calendar>

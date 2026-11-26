@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="action_report_property_brocure" model="ir.actions.report">
-        <field name="name">Property Brocure</field>
+        <field name="name">Property Brochure</field>
         <field name="model">real.estate.property</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">real_estate.model_property_brocure</field>

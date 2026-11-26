@@ -21,19 +21,20 @@ class ResPartner(models.Model):
     def action_view_offer(self):
         self.ensure_one()
         return {
-            'name': 'Offer',
+            'name': 'Offers',
             'type': 'ir.actions.act_window',
             'res_model': 'real.estate.offer',
             'view_mode': 'list,form',
-            'domain': [('partner_id', '=', self.id)]
+            'domain': [('partner_id', '=', self.id)],
         }
+
     def action_view_viewing(self):
         self.ensure_one()
         return {
-            'name': 'viewing',
+            'name': 'Viewings',
             'type': 'ir.actions.act_window',
             'res_model': 'real.estate.viewing',
             'view_mode': 'list,form',
-            'domain': [('partner_id', '=', self.id)]
+            'domain': [('partner_id', '=', self.id)],
         }
 
