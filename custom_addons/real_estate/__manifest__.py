@@ -10,6 +10,7 @@
         'security/real_estate_security.xml',
         'views/real_estate_property.xml',
         'data/real_estate_sequence.xml',
+        'data/real_estate_cron.xml',
         'views/real_estate_tag.xml',
         'views/real_estate_type.xml',
         'views/real_estate_offer.xml',

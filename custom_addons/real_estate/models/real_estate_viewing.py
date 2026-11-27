@@ -1,15 +1,17 @@
-from odoo import models,fields,api
-from datetime import timedelta
-from odoo.exceptions import ValidationError, UserError
+from datetime import datetime, time, timedelta
+from odoo import api, fields, models
+from odoo.exceptions import UserError, ValidationError
+
 
 class RealEstateViewing(models.Model):
     _name = 'real.estate.viewing'
     _description = 'Real Estate Viewing'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
     property_id = fields.Many2one('real.estate.property',required=True,ondelete='cascade')
     partner_id = fields.Many2one('res.partner',required=True)
     agent_id = fields.Many2one('res.users',default=lambda self: self.env.user)
-    date_start = fields.Datetime(required=True)
+    date_start = fields.Datetime(required=True, index=True)
     duration = fields.Float(default=1.0)
     date_stop = fields.Datetime(compute='_date_stop',store=True)
     state = fields.Selection([
@@ -62,5 +64,54 @@ class RealEstateViewing(models.Model):
             if record.state != 'scheduled':
                 raise UserError("Only scheduled viewings can be cancelled.")
             record.state = 'cancelled'
+
+    @api.model
+    def _cron_remind_upcoming_viewings(self, batch_size=100):
+        tomorrow = fields.Date.today() + timedelta(days=1)
+        start_dt = datetime.combine(tomorrow, time.min)
+        end_dt = start_dt + timedelta(days=1)
+        domain = [
+            ('state', '=', 'scheduled'),
+            ('date_start', '>=', start_dt),
+            ('date_start', '<', end_dt),
+        ]
+        total = self.search_count(domain)
+        if not total:
+            return
+        self.env['ir.cron']._commit_progress(remaining=total)
+        last_id = 0
+        while True:
+            batch = self.search(
+                domain + [('id', '>', last_id)],
+                order='id',
+                limit=batch_size,
+            )
+            if not batch:
+                break
+            last_id = batch[-1].id
+            for viewing in batch:
+                user_id = viewing.agent_id.id or viewing.property_id.agent_id.id
+                if not user_id:
+                    continue
+                already_scheduled = any(
+                    act.date_deadline == tomorrow
+                    and act.summary == 'Upcoming Viewing Reminder'
+                    for act in viewing.activity_ids
+                )
+                if already_scheduled:
+                    continue
+                viewing.activity_schedule(
+                    'mail.mail_activity_data_todo',
+                    date_deadline=tomorrow,
+                    summary='Upcoming Viewing Reminder',
+                    note=(
+                        f"Viewing scheduled tomorrow for "
+                        f"{viewing.property_id.display_name} with {viewing.partner_id.name}."
+                    ),
+                    user_id=user_id,
+                )
+            remaining_time = self.env['ir.cron']._commit_progress(processed=len(batch))
+            if not remaining_time:
+                break
 
 

@@ -17,7 +17,12 @@ class RealEstateOffer(models.Model):
         ('refused', 'Refused'),
     ], default='draft', copy=False, readonly=True)
     validity_days = fields.Integer(default=7)
-    date_deadline = fields.Date(compute='_compute_date_deadline', inverse='_inverse_date_deadline')
+    date_deadline = fields.Date(
+        compute='_compute_date_deadline',
+        inverse='_inverse_date_deadline',
+        store=True,
+        index=True,
+    )
 
     _min_price = models.Constraint(
         'CHECK(price > 0)',
@@ -72,3 +77,28 @@ class RealEstateOffer(models.Model):
         records = super().create(vals_list)
         records.property_id.state = 'listed'
         return records
+
+    @api.model
+    def _cron_expire_offer(self, batch_size=100):
+        domain = [
+            ('state', '=', 'draft'),
+            ('date_deadline', '<', fields.Date.today()),
+        ]
+        total = self.search_count(domain)
+        if not total:
+            return
+        self.env['ir.cron']._commit_progress(remaining=total)
+        while True:
+            batch = self.search(domain, order='property_id, id', limit=batch_size)
+            if not batch:
+                break
+            batch.write({'state': 'refused'})
+            for prop, offers in batch.grouped('property_id').items():
+                count = len(offers)
+                noun = "offer" if count == 1 else "offers"
+                prop.message_post(
+                    body=f"{count} expired draft {noun} automatically marked as refused."
+                )
+            remaining_time = self.env['ir.cron']._commit_progress(processed=len(batch))
+            if not remaining_time:
+                break
