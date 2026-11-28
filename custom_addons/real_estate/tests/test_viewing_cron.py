@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 from odoo import fields
 from odoo.addons.base.models.ir_cron import IrCron
+from odoo.exceptions import ValidationError
 from odoo.tests.common import TransactionCase
 
 
@@ -22,6 +23,7 @@ class TestViewingCron(TransactionCase):
             'name': 'Viewing Cron House',
             'expected_price': 120000.0,
             'agent_id': cls.agent.id,
+            'state': 'listed',
         })
 
         tomorrow = fields.Date.today() + timedelta(days=1)
@@ -59,3 +61,18 @@ class TestViewingCron(TransactionCase):
         self.assertEqual(act.summary, 'Upcoming Viewing Reminder')
         self.assertFalse(self.viewing_cancelled.activity_ids)
         self.assertFalse(self.viewing_later.activity_ids)
+
+    def test_viewing_requires_listed_property(self):
+        draft_prop = self.env['real.estate.property'].create({
+            'name': 'Draft House',
+            'expected_price': 100000.0,
+            'agent_id': self.agent.id,
+        })
+        tomorrow = fields.Date.today() + timedelta(days=1)
+        with self.assertRaises(ValidationError):
+            self.env['real.estate.viewing'].create({
+                'property_id': draft_prop.id,
+                'partner_id': self.partner.id,
+                'agent_id': self.agent.id,
+                'date_start': datetime.combine(tomorrow, time(16, 0)),
+            })

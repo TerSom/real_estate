@@ -8,7 +8,12 @@ class RealEstateViewing(models.Model):
     _description = 'Real Estate Viewing'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    property_id = fields.Many2one('real.estate.property',required=True,ondelete='cascade')
+    property_id = fields.Many2one(
+        'real.estate.property',
+        required=True,
+        ondelete='cascade',
+        domain=[('state', '=', 'listed')],
+    )
     partner_id = fields.Many2one('res.partner',required=True)
     agent_id = fields.Many2one('res.users',default=lambda self: self.env.user)
     date_start = fields.Datetime(required=True, index=True)
@@ -29,6 +34,12 @@ class RealEstateViewing(models.Model):
             else:
                 record.date_stop = False
 
+
+    @api.constrains('property_id')
+    def _check_property_listed(self):
+        for record in self:
+            if record.property_id and record.property_id.state != 'listed':
+                raise ValidationError("Viewings can only be scheduled for listed properties.")
 
     @api.constrains('agent_id','date_start','date_stop')
     def _check_schedule_overlap(self):

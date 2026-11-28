@@ -21,7 +21,7 @@
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_view_viewings" type="object" class="oe_stat_button" icon="calendar_today" icon_class="oi-filled">
+                        <button name="action_view_viewings" type="object" class="oe_stat_button" icon="calendar_today" icon_class="oi-filled" invisible="state != 'listed'">
                             <field name="viewing_count" string="Viewings" widget="statinfo"/>
                         </button>
                     </div>
